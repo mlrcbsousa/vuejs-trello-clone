@@ -1,5 +1,5 @@
 class ListsController < ApplicationController
-  before_action :set_list, only: [:show, :edit, :update, :destroy]
+  before_action :set_list, only: [:show, :edit, :update, :destroy, :move]
 
   # GET /lists
   # GET /lists.json
@@ -62,14 +62,20 @@ class ListsController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_list
-      @list = List.find(params[:id])
-    end
+  def move
+    @list.insert_at(list_params[:position].to_i)
+    render action: :show
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def list_params
-      params.require(:list).permit(:name, :position)
-    end
+  private
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_list
+    @list = List.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def list_params
+    params.require(:list).permit(:name, :position)
+  end
 end
